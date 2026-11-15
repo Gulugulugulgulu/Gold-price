@@ -28,4 +28,4 @@ if m and c:
     found[day(m.group(1))] = {"date": day(m.group(1)), "k24": num(m.group(2)), "k22": num(c.group(1))}
 
 if not found:
-    sys.
+        raise SystemExit("Could not read any rates")
