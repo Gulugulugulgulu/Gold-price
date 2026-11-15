@@ -1,1 +1,54 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mathura gold rate</title>
+<style>
+:root{--bg:#f4f4f2;--surface:#fff;--ink:#1c1b18;--muted:#6f6c64;--line:#e2e0da;--gold:#b7791f;--up:#15803d;--down:#c2410c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141412;--surface:#1e1d1a;--ink:#f2f0ea;--muted:#9a968b;--line:#34322d;--gold:#e0a63a;--up:#4ade80;--down:#fb923c}}
+:root[data-theme="dark"]{--bg:#141412;--surface:#1e1d1a;--ink:#f2f0ea;--muted:#9a968b;--line:#34322d;--gold:#e0a63a;--up:#4ade80;--down:#fb923c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+main{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:1rem;font-weight:600;margin:0;color:var(--muted)}
+.tog{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.tog button{border:0;background:none;color:var(--muted);padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+.tog button[aria-pressed="true"]{background:var(--gold);color:#fff}
+.price{font-size:2.6rem;font-weight:700;letter-spacing:-.02em;margin:14px 0 0}
+.chg{font-weight:600}
+.up{color:var(--up)}.down{color:var(--down)}
+.sub{color:var(--muted);font-size:.85rem;margin:2px 0 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px}
+svg{width:100%;height:auto;display:block}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;justify-content:space-between;align-items:baseline;padding:11px 4px;border-bottom:1px solid var(--line)}
+li:last-child{border-bottom:0}
+li small{display:block;color:var(--muted)}
+li .r{text-align:right}
+.na{color:var(--muted)}
+.note{color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><h1>Gold rate in Mathura, per 10 g</h1>
+<div class="tog" role="group" aria-label="Carat"><button id="b24" aria-pressed="true">24K</button><button id="b22" aria-pressed="false">22K</button></div></div>
+<div class="price" id="price"></div>
+<div class="sub" id="sub"></div>
+<div class="card"><svg id="chart" viewBox="0 0 340 170" role="img" aria-label="Gold price over the last 7 days"></svg></div>
+<div class="card"><ul id="list"></ul></div>
+<p class="note">Source: Business Today (Mathura rates, ₹ per 10 g, before GST and making charges). Missing days were not published. <span id="upd"></span> Refreshes itself daily.</p>
+</main>
+<script>
+(function(){
+var D=[],meta="";
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],DAY=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function build(rates,updated){
+var by={};rates.forEach(function(r){by[r.date]=r});
+var end=new Date(rates[rates.length-1].date+"T00:00:00");D=[];
+for(var i=6;i>=0;i--){var t=new Date(end);t.setDate(end.getDate()-i);
+var k=t.getFullYear()+"-"+String(t.getMonth()+1).padStart(
